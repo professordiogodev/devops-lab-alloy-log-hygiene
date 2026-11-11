@@ -1,0 +1,26 @@
+# PROVIDED. A noisy shop service, Loki to store its logs and Alloy to ship them. You write alloy/config.alloy.
+name: alloy-hygiene
+services:
+  shop:
+    image: python:3.12-slim
+    container_name: hygiene-shop
+    command: ["python", "/app/shop.py"]
+    volumes:
+      - ./shop:/app:ro
+    restart: unless-stopped
+  loki:
+    image: grafana/loki:3.2.1
+    command: ["-config.file=/etc/loki/loki.yaml"]
+    user: "0"
+    ports: ["127.0.0.1:3197:3100"]
+    volumes:
+      - ./loki:/etc/loki:ro
+    restart: unless-stopped
+  alloy:
+    image: grafana/alloy:v1.4.3
+    command: ["run", "--server.http.listen-addr=0.0.0.0:12345", "/etc/alloy/config.alloy"]
+    volumes:
+      - ./alloy:/etc/alloy:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on: [loki, shop]
+    restart: unless-stopped

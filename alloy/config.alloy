@@ -1,0 +1,18 @@
+// TODO: the log pipeline, in the Alloy syntax (https://grafana.com/docs/alloy/latest/reference/components/).
+// Reload after each change:   docker compose restart alloy        (logs: docker compose logs alloy)
+//
+// Read the raw logs first:    docker logs hygiene-shop | head -40
+//
+// 1. discovery.docker + discovery.relabel + loki.source.docker: read ONLY the container named hygiene-shop,
+//    and give every line ONE static label  service="shop"  (use a relabel rule).
+// 2. loki.process, with these stages in the right order:
+//      a. multiline     lines that belong together (a Python traceback is 6 lines) must become ONE entry.
+//                       A new entry starts with `{` (a JSON line) or `Traceback`. max_wait_time 3s.
+//      b. json          extract `level` and `route` from the JSON lines (the traceback entries are not JSON: that is fine)
+//      c. drop          health checks (route /healthz) and every line of level debug
+//      d. replace       redact: e-mail addresses -> [REDACTED-EMAIL]
+//                                card numbers (13 to 19 digits in a row) -> [REDACTED-CARD]
+//                                `Bearer <token>` -> Bearer [REDACTED]
+//      e. labels        the label `level` ONLY (from the extracted value). Entries that are a traceback get level="error" (stage.match + stage.static_labels).
+//                       request_id, order_id, route and e-mail addresses must NOT become labels.
+// 3. loki.write to http://loki:3100/loki/api/v1/push
