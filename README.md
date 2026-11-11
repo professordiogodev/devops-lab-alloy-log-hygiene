@@ -24,7 +24,7 @@
 
 <p align="center"><img src="assets/gifs/situation.gif" width="300" alt="A log line with an e-mail address and a card number is rewritten to [REDACTED-EMAIL] and [REDACTED-CARD] before it is stored"></p>
 
-You have just joined the platform team of a cafe franchise. On your second day the data-protection officer forwards you a short message she found in her inbox:
+You have just joined the platform team of a cafe franchise. On your second day the data-protection officer forwards you a short message that landed in the inbox:
 
 > *"We searched our log store for the word `@`. It returned 40,000 customer e-mail addresses, next to card numbers and a login token. Please tell me this is a test environment."*
 
