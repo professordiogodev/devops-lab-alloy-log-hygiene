@@ -35,7 +35,7 @@ Answer in your own words. Where a question asks for output, paste it in a code b
 
 <!-- replace this line with your answer -->
 
-### Q5. A stack trace is 12 lines. What does the log store do with them by default, why is that a problem when you search for the exception, and what did you do about it?
+### Q5. A stack trace is several lines. What does the log store do with them by default, why is that a problem when you search for the exception, and what did you do about it?
 
 **Your answer:**
 
